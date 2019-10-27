@@ -11,7 +11,7 @@ class RouteTest extends TestCase
      */
     public function test_text_content_is_rendered()
     {
-        $response = $this->call("GET", "/api/v1/sample-text");
+        $response = $this->call("GET", "/api/v1/test/show/text", [], false);
 
         $this->assertEquals($response, "Everything is awesome!");
     }
@@ -29,10 +29,9 @@ class RouteTest extends TestCase
         $address_id = rand(1,100);
 
         $response = $this->call("GET", "/api/v1/user/{$user_id}/address/{$address_id}");
-        $decoded_response = json_decode($response, true);
 
-        $this->assertTrue($decoded_response['data'][0]['id'] == $user_id);
-        $this->assertTrue($decoded_response['data'][0]['address_id'] == $address_id);
+        $this->assertEquals($response['data'][0]['id'], $user_id);
+        $this->assertEquals($response['data'][0]['address_id'], $address_id);
     }
 
     /**
@@ -42,9 +41,9 @@ class RouteTest extends TestCase
     {
         $test_json_data = 'Tony Starks built this in a cave... with a pile of scraps!';
 
-        $response = json_decode($this->call('POST', '/api/v1/post-test', [
+        $response = $this->call('POST', '/api/v1/test/post', [
             'text' => $test_json_data
-        ]), true);
+        ]);
 
         $this->assertTrue(array_key_exists('text', $response));
         $this->assertTrue($response['text'] === $test_json_data);
