@@ -3,14 +3,15 @@
 use App\Http\Foundation\Router;
 use \App\Http\Foundation\Request;
 
-Router::get("/api/v1/user/{id}", function (Request $request, $id) {
+Router::get("/api/v1/user/{id}/address/{addressId}", function (Request $request, $id, $addressId) {
     return [
         "data" => [
             [
                 'type' => 'users',
                 'id' => $id,
                 'first_name' => 'Tony',
-                'last_name' => 'Starks'
+                'last_name' => 'Starks',
+                'address_id' => $addressId
             ]
         ]
     ];
