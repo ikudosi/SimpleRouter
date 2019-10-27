@@ -43,7 +43,7 @@ class Application
      */
     public function handle(Request $request)
     {
-        $response = Router::getInstance()->determineResponseActionByUrl($request->server['REQUEST_METHOD'], $request->server['REQUEST_URI']);
+        $response = Router::determineResponseActionByUrl($request->server['REQUEST_METHOD'], $request->server['REQUEST_URI']);
 
         if (is_null($response)) {
             throw new HttpNotFoundException;

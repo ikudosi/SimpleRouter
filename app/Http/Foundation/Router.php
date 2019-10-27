@@ -89,18 +89,20 @@ class Router
      * @param $url
      * @return mixed
      */
-    public function determineResponseActionByUrl($method, $url)
+    public static function determineResponseActionByUrl($method, $url)
     {
+        $instance = static::getInstance();
+
         /*
          * The concept of this is to iterate through the collection of routes on the supplied request method.
          * On each iteration, it will compare each segment of the current iteration's url vs requested url.
          * If no match is given then this method returns a null.
          */
 
-        foreach ($this->routeGenerator($method) as $route_url => $action) {
+        foreach ($instance->routeGenerator($method) as $route_url => $action) {
 
-            $this->url_action = null;
-            $this->url_params = [];
+            $instance->url_action = null;
+            $instance->url_params = [];
 
             $explodedUrlArgument = explode("/", substr($url, 1));
             $explodedRouteUrl = explode("/", substr($route_url, 1));
@@ -124,7 +126,7 @@ class Router
                     if ($explodedRouteUrl[$i][0] === "{" && $explodedRouteUrl[$i][strlen($explodedRouteUrl[$i])-1] === "}") {
 
                         // Assign this value as a url param so it can be injected to the callable
-                        $this->url_params[] = $explodedUrlArgument[$i];
+                        $instance->url_params[] = $explodedUrlArgument[$i];
                     }
 
                     continue;
@@ -138,9 +140,9 @@ class Router
             if ($isSame) {
 
                 // Store the callable / controller@method
-                $this->url_action = $action;
+                $instance->url_action = $action;
 
-                return $this;
+                return $instance;
             }
         }
 
