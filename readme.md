@@ -12,3 +12,15 @@ a lot of things other frameworks have.
 - Checkout repo
 - Run ```composer install```
 - Run ```vendor/bin/phpunit```
+
+### Test Routes
+- `GET` /patients
+- `GET` /patients/{id}
+- `POST` /patients
+- `PATCH` /patients/{id}
+- `DELETE` /patients/{id}
+- `GET` /patients/{id}/metrics
+- `GET` /patients/{id}/metrics/{metricId}
+- `POST` /patients/{id}/metrics
+- `PATCH` /patients/{id}/metrics/{metricId}
+- `DELETE` /patients/{id}/metrics/{metricId}
