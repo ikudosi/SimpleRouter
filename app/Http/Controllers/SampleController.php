@@ -20,4 +20,9 @@ class SampleController
     {
         return $request->request;
     }
+
+    public function displayText(Request $request)
+    {
+        return "Everything is awesome!";
+    }
 }
