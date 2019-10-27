@@ -6,9 +6,9 @@ a lot of things other frameworks have.
 
 ### Requirements
 - PHP 7.1 (or higher)
+- composer
 
 ### Installation
-- Checkout the repo
-- Install composer if you do not have it
+- Checkout repo
 - Run ```composer install```
-- Run ```vendor/bin/phpunit```.
+- Run ```vendor/bin/phpunit```
