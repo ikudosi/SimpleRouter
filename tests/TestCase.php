@@ -8,17 +8,25 @@ use App\Http\Foundation\Request;
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     /** @var Application */
-    protected $app;
+    protected $app = null;
 
     /**
      * Fire the app
      */
     protected function setUp(): void
     {
-        parent::setUp();
-
         if (!$this->app) {
-            $this->app = include __DIR__.'/../bootstrap/app.php';
+            $this->app = require __DIR__.'/../bootstrap/app.php';
+        }
+    }
+
+    /**
+     *
+     */
+    protected function tearDown(): void
+    {
+        if ($this->app) {
+            $this->app = null;
         }
     }
 
@@ -26,14 +34,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * @param $method
      * @param $uri
      * @param  array  $parameters
+     * @param  bool  $decoded
      * @return mixed
      * @throws \App\Exceptions\HttpNotFoundException
      */
-    protected function call($method, $uri, $parameters = [])
+    protected function call($method, $uri, $parameters = [], $decoded = true)
     {
         $method = strtoupper($method);
 
-        return $this->app->handle(
+        $response = $this->app->handle(
             Request::createRequestFromFactory(
                 $method === "GET" ? $parameters : [],
                 $method === "POST" ? $parameters : [],
@@ -43,5 +52,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
                     'REQUEST_URI' => $uri[0] !== "/" ? "/".$uri : $uri
                 ]
             ))->getContent();
+
+        return $decoded ? json_decode($response, true) : $response;
     }
 }
