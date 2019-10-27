@@ -108,7 +108,7 @@ class Router
             $lengthArr1 = count($explodedUrlArgument);
             $lengthArr2 = count($explodedRouteUrl);
 
-            // First check if the counts are not equal as then they are not same potential URL
+            // First compare that both url segments are equal in length
             if ($lengthArr1 !== $lengthArr2) {
                 continue;
             }
