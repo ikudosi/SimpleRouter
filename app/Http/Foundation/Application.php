@@ -33,6 +33,7 @@ class Application
     public function mapRoutes()
     {
         Router::loadRouteFiles("web.php");
+        Router::loadRouteFiles('patients.php');
     }
 
     /**
@@ -42,19 +43,19 @@ class Application
      */
     public function handle(Request $request)
     {
-        $routing_data = Router::getInstance()->getActionByUrl($request->server['REQUEST_METHOD'], $request->server['REQUEST_URI']);
+        $response = Router::getInstance()->determineResponseActionByUrl($request->server['REQUEST_METHOD'], $request->server['REQUEST_URI']);
 
-        if (is_null($routing_data)) {
+        if (is_null($response)) {
             throw new HttpNotFoundException;
         }
 
-        if (is_callable($routing_data->url_action)) {
-            return new Response($routing_data->url_action->__invoke($request, ...$routing_data->url_params));
+        if (is_callable($response->url_action)) {
+            return new Response($response->url_action->__invoke($request, ...$response->url_params));
         }
 
-        if (is_string($routing_data->url_action)) {
-            $action = explode("@", $routing_data->url_action);
-            return new Response( (new $action[0])->{$action[1]}($request, ...$routing_data->url_params) );
+        if (is_string($response->url_action)) {
+            $action = explode("@", $response->url_action);
+            return new Response( (new $action[0])->{$action[1]}($request, ...$response->url_params) );
         }
     }
 

@@ -43,6 +43,36 @@ class Router
     }
 
     /**
+     * @param  string  $uri
+     * @param $target
+     * @return Router
+     */
+    public static function put(string $uri, $target)
+    {
+        return static::setRoute('PUT', $uri, $target);
+    }
+
+    /**
+     * @param  string  $uri
+     * @param $target
+     * @return Router
+     */
+    public static function patch(string $uri, $target)
+    {
+        return static::setRoute('PATCH', $uri, $target);
+    }
+
+    /**
+     * @param  string  $uri
+     * @param $target
+     * @return Router
+     */
+    public static function delete(string $uri, $target)
+    {
+        return static::setRoute('DELETE', $uri, $target);
+    }
+
+    /**
      * @return Router
      */
     public static function getInstance(): self
@@ -59,9 +89,12 @@ class Router
      * @param $url
      * @return mixed
      */
-    public function getActionByUrl($method, $url)
+    public function determineResponseActionByUrl($method, $url)
     {
         foreach ($this->routeGenerator($method) as $route_url => $action) {
+
+            $this->url_action = null;
+            $this->url_params = [];
 
             $explodedUrlArgument = explode("/", substr($url, 1));
             $explodedRouteUrl = explode("/", substr($route_url, 1));
@@ -82,7 +115,7 @@ class Router
                 if ($explodedUrlArgument[$i] === $explodedRouteUrl[$i] || $explodedRouteUrl[$i][0] === "{") {
 
                     // Check to see if current segment of url being parsed is a dynamic var if its wrapped in {}
-                    if ($explodedRouteUrl[$i][0] === "{" && $explodedRouteUrl[$i][strlen($explodedRouteUrl[$i])-1]) {
+                    if ($explodedRouteUrl[$i][0] === "{" && $explodedRouteUrl[$i][strlen($explodedRouteUrl[$i])-1] === "}") {
 
                         // Assign this value as a url param so it can be injected to the callable
                         $this->url_params[] = $explodedUrlArgument[$i];
@@ -91,7 +124,6 @@ class Router
                     continue;
                 } else {
                     $isSame = false;
-                    $this->url_params = [];
                 }
             }
 
@@ -136,6 +168,8 @@ class Router
     protected static function setRoute($method, $uri, $target)
     {
         $instance = static::getInstance();
+
+        $uri = trim($uri);
 
         $instance->{strtolower($method)}[$uri[0] !== "/" ? "/".$uri : $uri] = $target;
 

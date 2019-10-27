@@ -181,6 +181,16 @@ class Request
     }
 
     /**
+     * @param $param
+     * @param  null  $default
+     * @return |null
+     */
+    public function get($param, $default = null)
+    {
+        return $this->server['REQUEST_METHOD'] === 'GET' ? $this->query[$param] ?? $default : $this->request[$param] ?? $default;
+    }
+
+    /**
      * @param  array  $query
      * @param  array  $request
      * @param  array  $attributes
