@@ -6,6 +6,10 @@ class Response
 {
     protected $content;
 
+    /**
+     * Response constructor.
+     * @param $content
+     */
     public function __construct($content)
     {
         $this->content = $content;
@@ -13,6 +17,9 @@ class Response
         $this->setHeaders($content);
     }
 
+    /**
+     * @param $content
+     */
     public function parseContent($content)
     {
         if (!is_string($content)) {
@@ -20,6 +27,9 @@ class Response
         }
     }
 
+    /**
+     * @param $content
+     */
     public function setHeaders($content)
     {
         if (headers_sent()) {

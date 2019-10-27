@@ -91,6 +91,12 @@ class Router
      */
     public function determineResponseActionByUrl($method, $url)
     {
+        /*
+         * The concept of this is to iterate through the collection of routes on the supplied request method.
+         * On each iteration, it will compare each segment of the current iteration's url vs requested url.
+         * If no match is given then this method returns a null.
+         */
+
         foreach ($this->routeGenerator($method) as $route_url => $action) {
 
             $this->url_action = null;
@@ -124,6 +130,7 @@ class Router
                     continue;
                 } else {
                     $isSame = false;
+                    break;
                 }
             }
 
@@ -140,6 +147,12 @@ class Router
         return null;
     }
 
+    /**
+     * Uses PHP generators to iterate through the given route method
+     *
+     * @param $method
+     * @return \Generator
+     */
     public function routeGenerator($method)
     {
         foreach ($this->{strtolower($method)} as $url => $action) {
